@@ -58,12 +58,14 @@ class FirstWeekTests(TestCase):
         book = Book.objects.get(id=1)
         self.assertTrue((book.genre.count()>= 2))
 
-
+    # UPDATE ON feb-03
+    #def test_due_back_book_on_loan(self):
+    #    bi = BookInstance.objects.filter(book__title='The Shining').first()
+    #    self.assertEqual(str(bi.due_back), '2021-10-10')
+    
     def test_due_back_book_on_loan(self):
-        # only one that fails ask teacher
-        bi = BookInstance.objects.filter(book__title='The Shining').first()
+        bi = BookInstance.objects.filter(book__title='The Shining', status='o').first()
         self.assertEqual(str(bi.due_back), '2021-10-10')
-
 
     def test_books_on_loan(self):
         bi = BookInstance.objects.filter(status='o').count()
