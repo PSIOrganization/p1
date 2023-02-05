@@ -60,6 +60,7 @@ class FirstWeekTests(TestCase):
 
 
     def test_due_back_book_on_loan(self):
+        # only one that fails ask teacher
         bi = BookInstance.objects.filter(book__title='The Shining').first()
         self.assertEqual(str(bi.due_back), '2021-10-10')
 
