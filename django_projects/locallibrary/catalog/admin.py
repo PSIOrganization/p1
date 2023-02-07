@@ -10,6 +10,7 @@ admin.site.register(Genre)
 
 class BooksInline(admin.TabularInline):
     model = Book
+    extra = 0
 
 # Define the admin class
 class AuthorAdmin(admin.ModelAdmin):
