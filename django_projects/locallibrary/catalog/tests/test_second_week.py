@@ -63,7 +63,6 @@ class SecondWeekTests(TestCase):
         from catalog.models import Book as bo
         self.assertTrue(aa.inlines[0] == bil)
         self.assertTrue(bil.model == bo)
-        print(bil)
         self.assertEqual(bil.extra,0)
 
 
