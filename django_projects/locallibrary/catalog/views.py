@@ -70,3 +70,6 @@ class LibrarianView(PermissionRequiredMixin, generic.ListView):
     model = BookInstance
     permission_required = 'catalog.can_mark_returned'
     template_name = 'catalog/librarian-books.html'
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='r').order_by('due_back')
