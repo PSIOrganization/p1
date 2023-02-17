@@ -6,6 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from django.contrib.auth.decorators import login_required, permission_required
+
 from catalog.forms import RenewBookForm
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -66,8 +68,9 @@ class AuthorListView(generic.ListView):
     paginate_by = 10
 
 
-class AuthorDetailView(generic.DetailView):
+class AuthorDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
     model = Author
+    permission_required = 'catalog.can_mark_returned'
 
 class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
@@ -87,6 +90,8 @@ class LibrarianView(PermissionRequiredMixin, generic.ListView):
         return BookInstance.objects.filter(status__exact='r').order_by('due_back')
 
 
+@login_required
+@permission_required('catalog.can_mark_returned', raise_exception=True)
 def renew_book_librarian(request, pk):
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
@@ -103,7 +108,7 @@ def renew_book_librarian(request, pk):
             book_instance.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('librarian-borrowed'))
+            return HttpResponseRedirect(reverse('all-borrowed'))
 
     # If this is a GET (or any other method) create the default form.
     else:
@@ -117,29 +122,35 @@ def renew_book_librarian(request, pk):
 
     return render(request, 'catalog/book_renew_librarian.html', context)
 
-class AuthorCreate(CreateView):
+class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
+    permission_required = 'catalog.can_mark_returned'
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
     initial = {'date_of_death': '11/06/2020'}
 
-class AuthorUpdate(UpdateView):
+class AuthorUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Author
+    permission_required = 'catalog.can_mark_returned'
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
-class AuthorDelete(DeleteView):
+class AuthorDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Author
+    permission_required = 'catalog.can_mark_returned'
     success_url = reverse_lazy('authors')
 
 
-class BookCreate(CreateView):
+class BookCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Book
+    permission_required = 'catalog.can_mark_returned'
     fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
     initial = {'language': 'spanish'}
 
-class BookUpdate(UpdateView):
+class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
+    permission_required = 'catalog.can_mark_returned'
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
-class BookDelete(DeleteView):
+class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
+    permission_required = 'catalog.can_mark_returned'
     success_url = reverse_lazy('authors')
