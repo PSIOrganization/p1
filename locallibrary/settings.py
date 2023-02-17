@@ -155,5 +155,5 @@ if 'TESTING' not in os.environ:
 if 'TESTING' in os.environ:
     db_from_env = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi', conn_max_age=500)
 else:
-    db_from_env = dj_database_url.config(default='postgres://manuloseta:manuloseta@ep-soft-forest-209604.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
+    db_from_env = dj_database_url.config(default='postgres://manuloseta:Utl0bNDE5RXF@ep-white-heart-194986.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
 DATABASES['default'].update(db_from_env)
