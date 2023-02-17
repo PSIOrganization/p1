@@ -85,7 +85,6 @@ DATABASES =  {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        'PASSWORD': 'password',
     }
 }
 
@@ -155,5 +154,5 @@ if 'TESTING' not in os.environ:
 if 'TESTING' in os.environ:
     db_from_env = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi', conn_max_age=500)
 else:
-    db_from_env = dj_database_url.config(default='postgres://manuloseta:9CHEKeYAyn0b@ep-fragrant-hat-011829.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
+    db_from_env = dj_database_url.config(default='postgres://manuloseta:pAMh2l0RqZoF@ep-long-wood-976036.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
 DATABASES['default'].update(db_from_env)
