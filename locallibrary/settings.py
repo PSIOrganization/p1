@@ -85,7 +85,7 @@ DATABASES =  {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        'PASSWORD': ' ',
+        'PASSWORD': 'password',
     }
 }
 
@@ -157,4 +157,3 @@ if 'TESTING' in os.environ:
 else:
     db_from_env = dj_database_url.config(default='postgres://manuloseta@ep-soft-forest-209604.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-del DATABASES['default']['PASSWORD']
