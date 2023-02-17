@@ -19,13 +19,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ap3%1_dgly_aw^ylvef&a71vb0!)$^dy7fp7-zmq_i+nfgf!64'
+#SECRET_KEY = 'django-insecure-ap3%1_dgly_aw^ylvef&a71vb0!)$^dy7fp7-zmq_i+nfgf!64'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ 
 
-ALLOWED_HOSTS = []
-
+if 'TESTING' in os.environ:
+    SECRET_KEY = 'django-insecure-ap3%1_dgly_aw^ylvef&a71vb0!)$^dy7fp7-zmq_i+nfgf!64'
+    DEBUG = True
+    ALLOWED_HOSTS = []
+else:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    DEBUG = False
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
 # Application definition
 
@@ -42,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,3 +144,14 @@ DATABASES['default'].update(db_from_env)
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+if 'TESTING' not in os.environ:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# To run the tests: export TESTING=1, or to use the app: unset TESTING
+# To see the current value just type echo $TESTING
+if 'TESTING' in os.environ:
+    db_from_env = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi', conn_max_age=500)
+else:
+    db_from_env = dj_database_url.config(default='postgres://manuloseta@ep-soft-forest-209604.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
+DATABASES['default'].update(db_from_env)
