@@ -68,9 +68,8 @@ class AuthorListView(generic.ListView):
     paginate_by = 10
 
 
-class AuthorDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
+class AuthorDetailView(generic.DetailView):
     model = Author
-    permission_required = 'catalog.can_mark_returned'
 
 class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""

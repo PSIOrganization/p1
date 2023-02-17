@@ -309,52 +309,45 @@ class AuthorCreateViewTest(TestCase):
             date_of_birth='2020-02-17',
             date_of_death='2022-01-20'
         )
-        # Create a book
-        # test_genre = Genre.objects.create(name='Fantasy')
-        # test_language = Language.objects.create(name='English')
-        # test_book = Book.objects.create(
-        #     title='Book Title',
-        #     summary='My book summary',
-        #     isbn='ABCDEFG',
-        #     author=test_author,
-        #     language=test_language,
-        # )
-
-        # Create genre as a post-step
-        # genre_objects_for_book = Genre.objects.all()
-        # test_book.genre.set(genre_objects_for_book) # Direct assignment of many-to-many types not allowed.
-        # test_book.save()
-
-        # return_date = datetime.date.today() + datetime.timedelta(days=5)
-
-
 
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('author-detail', kwargs={'pk': self.test_author.pk}))
+        response = self.client.get(reverse('author-create'))
         # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url.startswith('/accounts/login/'))
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('author-detail', kwargs={'pk': self.test_author.pk}))
+        response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 403)
 
     def test_logged_in_with_permission(self):
         login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
-        response = self.client.get(reverse('author-detail', kwargs={'pk': self.test_author.pk}))
+        response = self.client.get(reverse('author-create'))
         # Check that it lets us login - this is our book and we have the right permissions.
         self.assertEqual(response.status_code, 200)
     
     def test_uses_correct_template(self):
         login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
-        response = self.client.get(reverse('author-detail', kwargs={'pk': self.test_author.pk}))
+        response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 200)
         # Check we used correct template
-        self.assertTemplateUsed(response, 'catalog/author_detail.html')
+        self.assertTemplateUsed(response, 'catalog/author_form.html')
     
     def test_form_date_of_death_initially_set_to_expected_date(self):
-        pass
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 200)
+
+        expected_initial_date = datetime.date(2020, 6, 11)
+        response_date = response.context['form'].initial['date_of_death']
+        response_date = datetime.datetime.strptime(response_date, "%d/%m/%Y").date()
+        self.assertEqual(response_date, expected_initial_date)
 
     def test_redirects_to_detail_view_on_success(self):
-        pass
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        response = self.client.post(reverse('author-create'),
+                                    {'first_name': 'Christian Name', 'last_name': 'Surname'})
+        # Manually check redirect because we don't know what author was created
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/catalog/author/'))
