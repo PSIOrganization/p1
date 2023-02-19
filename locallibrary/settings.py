@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os # needed by code below
+import os  # needed by code below
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -18,14 +18,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-ap3%1_dgly_aw^ylvef&a71vb0!)$^dy7fp7-zmq_i+nfgf!64'
-
 # SECURITY WARNING: don't run with debug turned on in production!
- 
+
 
 if 'TESTING' in os.environ:
-    SECRET_KEY = 'django-insecure-ap3%1_dgly_aw^ylvef&a71vb0!)$^dy7fp7-zmq_i+nfgf!64'
+    SECRET_KEY = 'django-insecure-ap3%'
+    '1_dgly_aw^ylvef&a71vb0!)$^dy7fp7-zmq_i+nfgf!64'
     DEBUG = True
     ALLOWED_HOSTS = []
 else:
@@ -42,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     # Add our new application
-    'catalog.apps.CatalogConfig', #This object was created for us in /catalog/apps.py
+    # Add our new application
+    'catalog.apps.CatalogConfig',  # This object
+    # was created for us in /catalog/apps.py
 ]
 
 MIDDLEWARE = [
@@ -81,7 +80,7 @@ WSGI_APPLICATION = 'locallibrary.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES =  {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -94,16 +93,20 @@ DATABASES =  {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+        'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+        'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+        'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+        'NumericPasswordValidator',
     },
 ]
 
@@ -134,12 +137,9 @@ STATIC_ROOT = 'catalog/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#The following environment variable, called DATABASE_URL, has to be defined
-#at the o.s. level: export DATABASE_URL =
+# The following environment variable, called DATABASE_URL, has to be defined
+# at the o.s. level: export DATABASE_URL =
 # ’postgres://alumnodb:alumnodb@localhost:5432/psi’
-
-# db_from_env = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi', conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
@@ -147,12 +147,18 @@ LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 if 'TESTING' not in os.environ:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.'
+    'storage.CompressedManifestStaticFilesStorage'
 
 # To run the tests: export TESTING=1, or to use the app: unset TESTING
 # To see the current value just type echo $TESTING
 if 'TESTING' in os.environ:
-    db_from_env = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi', conn_max_age=500)
+    db_from_env = dj_database_url.config(
+                  default='postgres://alumnodb:alumnodb@localhost:5432/psi',
+                  conn_max_age=500)
 else:
-    db_from_env = dj_database_url.config(default='postgres://manuloseta:r4yifl5LKdYs@ep-wandering-water-011949.eu-central-1.aws.neon.tech/neondb', conn_max_age=500)
+    db_from_env = dj_database_url.config(
+                  default='postgres://manuloseta:r4yifl5LKdYs@'
+                  'ep-wandering-water-011949.eu-central-1.aws.'
+                  'neon.tech/neondb', conn_max_age=500)
 DATABASES['default'].update(db_from_env)
